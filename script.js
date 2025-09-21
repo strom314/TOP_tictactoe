@@ -27,8 +27,17 @@ const gameManager = (function () {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  function checkForWin(symbol){
-    
+  function checkForWin(symbol) {
+    winPatterns.forEach((pattern) => {
+      if (
+        gameBoard.board[pattern[0]] === symbol &&
+        gameBoard.board[pattern[1]] === symbol &&
+        gameBoard.board[pattern[2]] === symbol
+      ) {
+        return true;
+      }
+    });
+    return false;
   }
 })();
 
