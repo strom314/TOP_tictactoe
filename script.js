@@ -49,6 +49,20 @@ const gameManager = (function () {
   return { checkForWin };
 })();
 
+const domManager = (function () {
+  const gameContainer = document.querySelector(".game-container");
+  const symbolButtons = document.querySelectorAll(".symbol-button");
+
+  function updateButtons() {
+    for (let i = 0; i < gameBoard.getBoard().length; i++) {
+      const symbol = gameBoard.getBoard()[i];
+      symbolButtons[i].textContent = symbol;
+    }
+  }
+
+  return { updateButtons };
+})();
+
 function createPlayer(name, symbol) {
   function play(index) {
     gameBoard.placeSymbol(symbol, index);
@@ -65,5 +79,7 @@ player2 = createPlayer("Noam", "O");
 player1.play(0);
 player1.play(1);
 player2.play(4);
-player1.play(2);
-gameBoard.printBoard();
+domManager.updateButtons();
+// player2.play(4);
+// player1.play(2);
+// gameBoard.printBoard();
