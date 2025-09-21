@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-  const board = ["", "", "", "", "", "", "", "", ""];
+  let board = ["", "", "", "", "", "", "", "", ""];
 
   function placeSymbol(symbol, index) {
     if (board[index] === "") {
@@ -12,8 +12,11 @@ const gameBoard = (function () {
   function getBoard() {
     return board;
   }
+  function resetBoard() {
+    board = ["", "", "", "", "", "", "", "", ""];
+  }
 
-  return { placeSymbol, printBoard };
+  return { placeSymbol, printBoard, getBoard, resetBoard };
 })();
 
 const gameManager = (function () {
@@ -28,22 +31,29 @@ const gameManager = (function () {
     [2, 4, 6],
   ];
   function checkForWin(symbol) {
+    const board = gameBoard.getBoard();
     winPatterns.forEach((pattern) => {
       if (
-        gameBoard.board[pattern[0]] === symbol &&
-        gameBoard.board[pattern[1]] === symbol &&
-        gameBoard.board[pattern[2]] === symbol
+        board[pattern[0]] === symbol &&
+        board[pattern[1]] === symbol &&
+        board[pattern[2]] === symbol
       ) {
+        console.log("player " + symbol + " has won");
+        gameBoard.resetBoard();
         return true;
       }
     });
     return false;
   }
+
+  return { checkForWin };
 })();
 
 function createPlayer(name, symbol) {
   function play(index) {
     gameBoard.placeSymbol(symbol, index);
+    gameBoard.printBoard();
+    gameManager.checkForWin(symbol);
   }
 
   return { name, symbol, play };
@@ -53,6 +63,7 @@ player1 = createPlayer("ivan", "X");
 player2 = createPlayer("Noam", "O");
 
 player1.play(0);
+player1.play(1);
 player2.play(4);
-player1.play(4);
+player1.play(2);
 gameBoard.printBoard();
