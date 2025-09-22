@@ -50,8 +50,17 @@ const gameManager = (function () {
 })();
 
 const domManager = (function () {
-  const gameContainer = document.querySelector(".game-container");
-  const symbolButtons = document.querySelectorAll(".symbol-button");
+  const symbolButtons = Array.from(document.querySelectorAll(".symbol-button"));
+
+  symbolButtons.forEach((button) => {
+    button.addEventListener("click", placeSymbol);
+  });
+
+  function placeSymbol(event) {
+    const index = symbolButtons.indexOf(event.target);
+
+    player1.play(index);
+  }
 
   function updateButtons() {
     for (let i = 0; i < gameBoard.getBoard().length; i++) {
@@ -66,7 +75,7 @@ const domManager = (function () {
 function createPlayer(name, symbol) {
   function play(index) {
     gameBoard.placeSymbol(symbol, index);
-    gameBoard.printBoard();
+    domManager.updateButtons();
     gameManager.checkForWin(symbol);
   }
 
