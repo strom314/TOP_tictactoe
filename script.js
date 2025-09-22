@@ -31,6 +31,18 @@ const gameManager = (function () {
     [2, 4, 6],
   ];
 
+  let turn = 0;
+
+  function addTurn() {
+    turn++;
+  }
+  function resetTurn() {
+    turn = 0;
+  }
+  function getTurn() {
+    return turn;
+  }
+
   function checkForWin(symbol) {
     const board = gameBoard.getBoard();
     winPatterns.forEach((pattern) => {
@@ -39,20 +51,25 @@ const gameManager = (function () {
         board[pattern[1]] === symbol &&
         board[pattern[2]] === symbol
       ) {
+        //win
         console.log("player " + symbol + " has won");
         gameBoard.resetBoard();
+        resetTurn();
         return true;
       } else if (board.indexOf("") === -1) {
+        //draw
         console.log("It's a draw");
         gameBoard.resetBoard();
+        resetTurn();
         return true;
       }
     });
 
+    //nothing
     return false;
   }
 
-  return { checkForWin };
+  return { checkForWin, addTurn, getTurn };
 })();
 
 const domManager = (function () {
@@ -65,7 +82,11 @@ const domManager = (function () {
   function placeSymbol(event) {
     const index = symbolButtons.indexOf(event.target);
 
-    player1.play(index);
+    if (gameManager.getTurn() % 2 == 0) {
+      player1.play(index);
+    } else {
+      player2.play(index);
+    }
   }
 
   function updateButtons() {
@@ -82,6 +103,7 @@ function createPlayer(name, symbol) {
   function play(index) {
     gameBoard.placeSymbol(symbol, index);
     domManager.updateButtons();
+    gameManager.addTurn();
     gameManager.checkForWin(symbol);
   }
 
@@ -91,9 +113,6 @@ function createPlayer(name, symbol) {
 player1 = createPlayer("ivan", "X");
 player2 = createPlayer("Noam", "O");
 
-player1.play(0);
-player1.play(1);
-player2.play(4);
 domManager.updateButtons();
 // player2.play(4);
 // player1.play(2);
