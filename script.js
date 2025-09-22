@@ -48,6 +48,7 @@ const gameManager = (function () {
   function startGame() {
     if (gameOver) {
       domManager.updateButtons();
+      domManager.setWinText("");
       gameOver = false;
       inputAllowed = true;
     }
@@ -73,12 +74,12 @@ const gameManager = (function () {
         board[pattern[2]] === symbol
       ) {
         //win
-        console.log("player " + symbol + " has won");
+        domManager.setWinText(symbol);
         endGame();
         return true;
       } else if (board.indexOf("") === -1) {
         //draw
-        console.log("It's a draw");
+        domManager.setWinText("d");
         endGame();
         return true;
       }
@@ -95,6 +96,7 @@ const domManager = (function () {
   const symbolButtons = Array.from(document.querySelectorAll(".symbol-button"));
   const startButton = document.querySelector(".start");
   const restartButton = document.querySelector(".restart");
+  const winText = document.querySelector(".win-text");
 
   symbolButtons.forEach((button) => {
     button.addEventListener("click", placeSymbol);
@@ -102,6 +104,18 @@ const domManager = (function () {
 
   startButton.addEventListener("click", startGame);
   restartButton.addEventListener("click", restartGame);
+
+  function setWinText(symbol) {
+    if (symbol == "x") {
+      winText.textContent = "X is victorious!";
+    } else if (symbol == "o") {
+      winText.textContent = "O is victorious!";
+    } else if (symbol == "d") {
+      winText.textContent = "It's a draw!";
+    } else {
+      winText.textContent = "";
+    }
+  }
 
   function startGame() {
     gameManager.startGame();
@@ -129,7 +143,7 @@ const domManager = (function () {
     }
   }
 
-  return { updateButtons };
+  return { updateButtons, setWinText };
 })();
 
 function createPlayer(name, symbol) {
@@ -145,8 +159,8 @@ function createPlayer(name, symbol) {
   return { name, symbol, play };
 }
 
-player1 = createPlayer("ivan", "X");
-player2 = createPlayer("Noam", "O");
+player1 = createPlayer("ivan", "x");
+player2 = createPlayer("Noam", "o");
 
 domManager.updateButtons();
 // player2.play(4);
