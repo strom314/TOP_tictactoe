@@ -1,18 +1,70 @@
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  background: #2a7b9b;
+  background: linear-gradient(
+    25deg,
+    rgba(42, 123, 155, 1) 0%,
+    rgba(87, 199, 133, 1) 50%,
+    rgba(237, 221, 83, 1) 100%
+  );
 }
 .game-container {
   width: 400px;
   height: 400px;
-  padding: 10px;
+  padding: 20px;
+  margin: 20px;
+  margin-bottom: 40px;
 
-  background-color: antiquewhite;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 10px;
+}
+
+.symbol-button {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+
+  font-size: 3rem;
+}
+.symbol-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.win-text {
+  font-size: 2rem;
+  margin: 0;
+  /* margin-bottom: 20px; */
+}
+.controls-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+.controls-container button {
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 16px;
+  padding: 10px 20px;
+
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.controls-container button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  scale: 1.1;
 }
