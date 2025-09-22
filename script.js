@@ -30,6 +30,7 @@ const gameManager = (function () {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
   function checkForWin(symbol) {
     const board = gameBoard.getBoard();
     winPatterns.forEach((pattern) => {
@@ -41,8 +42,13 @@ const gameManager = (function () {
         console.log("player " + symbol + " has won");
         gameBoard.resetBoard();
         return true;
+      } else if (board.indexOf("") === -1) {
+        console.log("It's a draw");
+        gameBoard.resetBoard();
+        return true;
       }
     });
+
     return false;
   }
 
