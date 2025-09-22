@@ -32,6 +32,8 @@ const gameManager = (function () {
   ];
 
   let turn = 0;
+  let inputAllowed = false;
+  let gameOver = true;
 
   function addTurn() {
     turn++;
@@ -41,6 +43,25 @@ const gameManager = (function () {
   }
   function getTurn() {
     return turn;
+  }
+
+  function startGame() {
+    if (gameOver) {
+      domManager.updateButtons();
+      gameOver = false;
+      inputAllowed = true;
+    }
+  }
+  function endGame() {
+    inputAllowed = false;
+
+    resetTurn();
+    gameBoard.resetBoard();
+    gameOver = true;
+  }
+
+  function canIplay() {
+    return inputAllowed;
   }
 
   function checkForWin(symbol) {
@@ -53,14 +74,12 @@ const gameManager = (function () {
       ) {
         //win
         console.log("player " + symbol + " has won");
-        gameBoard.resetBoard();
-        resetTurn();
+        endGame();
         return true;
       } else if (board.indexOf("") === -1) {
         //draw
         console.log("It's a draw");
-        gameBoard.resetBoard();
-        resetTurn();
+        endGame();
         return true;
       }
     });
@@ -69,15 +88,29 @@ const gameManager = (function () {
     return false;
   }
 
-  return { checkForWin, addTurn, getTurn };
+  return { checkForWin, addTurn, getTurn, startGame, endGame, canIplay };
 })();
 
 const domManager = (function () {
   const symbolButtons = Array.from(document.querySelectorAll(".symbol-button"));
+  const startButton = document.querySelector(".start");
+  const restartButton = document.querySelector(".restart");
 
   symbolButtons.forEach((button) => {
     button.addEventListener("click", placeSymbol);
   });
+
+  startButton.addEventListener("click", startGame);
+  restartButton.addEventListener("click", restartGame);
+
+  function startGame() {
+    gameManager.startGame();
+  }
+
+  function restartGame() {
+    gameManager.endGame();
+    updateButtons();
+  }
 
   function placeSymbol(event) {
     const index = symbolButtons.indexOf(event.target);
@@ -101,10 +134,12 @@ const domManager = (function () {
 
 function createPlayer(name, symbol) {
   function play(index) {
-    gameBoard.placeSymbol(symbol, index);
-    domManager.updateButtons();
-    gameManager.addTurn();
-    gameManager.checkForWin(symbol);
+    if (gameManager.canIplay()) {
+      gameBoard.placeSymbol(symbol, index);
+      domManager.updateButtons();
+      gameManager.addTurn();
+      gameManager.checkForWin(symbol);
+    }
   }
 
   return { name, symbol, play };
